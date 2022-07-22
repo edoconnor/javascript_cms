@@ -113,12 +113,11 @@ app.post(
 
 app.put(
   "/:id",
-  connectEnsureLogin.ensureLoggedIn(),
   async (req, res, next) => {
     req.article = await Article.findById(req.params.id);
     next();
   },
-  saveArticleAndRedirect("/")
+  saveArticleAndRedirect("/admin-index")
 );
 
 app.delete("/:id", async (req, res) => {
