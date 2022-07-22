@@ -41,6 +41,15 @@
               id="admin-edit-btn"
               >Back</a
             >
+            <form action="/logout" method="POST" class="d-inline">
+              <button
+                type="submit"
+                id="admin-edit-btn"
+                class="btn btn-outline-danger"
+              >
+                Logout
+              </button>
+            </form>
 
             <a
               href="/edit/<%= article.id %>"

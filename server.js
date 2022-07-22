@@ -125,7 +125,7 @@ app.delete("/:id", async (req, res) => {
   res.redirect("/");
 });
 
-app.post("logout", function (req, res) {
+app.post("/logout", function (req, res) {
   req.logout(function (err) {
     if (err) {
       return next(err);
