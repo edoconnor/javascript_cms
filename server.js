@@ -1,17 +1,17 @@
-const express = require("express");  
-const bodyParser = require("body-parser");  
-const passport = require("passport");  
+const express = require("express");
+const bodyParser = require("body-parser");
+const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const connectEnsureLogin = require("connect-ensure-login");  
+const connectEnsureLogin = require("connect-ensure-login");
 const methodOverride = require("method-override");
 const Article = require("./models/article");
 
-const User = require("./user.js");  
+const User = require("./user.js");
 
 const app = express();
 
-PORT = process.env.PORT  
+const PORT = process.env.PORT || 3000;
 
 app.use(
   session({
@@ -143,3 +143,7 @@ app.post(
     res.redirect("/admin-index");
   }
 );
+
+app.listen(PORT, () => {
+  console.log(`Our app is running on port ${PORT}`);
+});
