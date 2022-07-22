@@ -10,6 +10,8 @@ const User = require("./user.js"); // User Model
 
 const app = express();
 
+PORT = process.env.PORT || 3000;
+
 app.use(
   session({
     secret: "e0ee1c265d41fa0c16ed3a5d3f08f8cec962d17fd8c2858ea1560a5d0be874c9",
@@ -80,7 +82,7 @@ app.get("/edit/:id", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   res.render("edit", { article: article });
 });
 
-app.get("/:slug", async (req, res) => {
+app.get("/show/:slug", async (req, res) => {
   const article = await Article.findOne({ slug: req.params.slug });
   if (article == null) res.redirect("/");
   res.render("show", { article: article });

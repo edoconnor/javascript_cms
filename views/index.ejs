@@ -36,7 +36,7 @@
             />
             <div class="index-card-body">
               <h4 class="index-card-title">
-                <a class="index-card-title" href="<%= article.title %>"
+                <a class="index-card-title" href="/show/<%= article.slug %>"
                   ><%= article.title %></a
                 >
               </h4>
@@ -46,7 +46,7 @@
               </p>
             </div>
             <a
-              href="/<%= article.slug %>"
+              href="/show/<%= article.slug %>"
               class="btn btn-outline-primary"
               >Read More</a
             >
