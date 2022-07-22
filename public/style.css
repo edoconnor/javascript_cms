@@ -73,11 +73,15 @@ h3 {
   margin-top: 1rem;
 }
 
+p.index-card-title {
+  font-size: 1.5rem;
+}
+
 @media (max-width: 25em) {
   a.navbar-title {
     font-size: 1rem;
   }
-  a.index-card-title {
+  p.index-card-title {
     font-size: 1.5rem;
     text-decoration: none;
   }
@@ -90,12 +94,12 @@ h3 {
   a.navbar-title {
     font-size: 1.5rem;
   }
+  .index-card-title {
+    font-size: 3rem;
+  }
 }
 
 @media (max-width: 38.25em) {
-  a.index-card-title {
-    font-size: 2rem;
-  }
   .index-card-text {
     font-size: 1rem;
   }
@@ -126,7 +130,7 @@ h3 {
   }
 }
 
-h5.index-card-title,
+h4.index-card-title,
 .index-card-title {
   margin-top: 10px;
   text-decoration: none;
