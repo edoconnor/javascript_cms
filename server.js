@@ -118,7 +118,7 @@ app.put(
     req.article = await Article.findById(req.params.id);
     next();
   },
-  saveArticleAndRedirect("edit")
+  saveArticleAndRedirect("/")
 );
 
 app.delete("/:id", async (req, res) => {
