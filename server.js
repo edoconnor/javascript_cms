@@ -1,23 +1,27 @@
-const express = require("express"); // server software
-const bodyParser = require("body-parser"); // parser middleware
-const session = require("express-session"); // session middleware
-const passport = require("passport"); // authentication
-const connectEnsureLogin = require("connect-ensure-login"); //authorization
+const express = require("express");  
+const bodyParser = require("body-parser");  
+const passport = require("passport");  
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const connectEnsureLogin = require("connect-ensure-login");  
 const methodOverride = require("method-override");
 const Article = require("./models/article");
 
-const User = require("./user.js"); // User Model
+const User = require("./user.js");  
 
 const app = express();
 
-PORT = process.env.PORT;
+PORT = process.env.PORT  
 
 app.use(
   session({
-    secret: "e0ee1c265d41fa0c16ed3a5d3f08f8cec962d17fd8c2858ea1560a5d0be874c9",
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour
+    saveUninitialized: false,
+    secret: "e0ee1c265d41fa0c16ed3a5d3f08f8cec962d17fd8c2858ea1560a5d0be874c9",
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://eddie:jamestown@cluster0.swuan.mongodb.net/test?retryWrites=true&w=majority",
+    }),
   })
 );
 
