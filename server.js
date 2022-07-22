@@ -108,7 +108,7 @@ app.post(
     req.article = new Article();
     next();
   },
-  saveArticleAndRedirect("/index")
+  saveArticleAndRedirect("/admin-index")
 );
 
 app.put(
