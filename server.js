@@ -10,7 +10,7 @@ const User = require("./user.js"); // User Model
 
 const app = express();
 
-PORT = process.env.PORT || 3000;
+PORT = process.env.PORT;
 
 app.use(
   session({
@@ -139,6 +139,3 @@ app.post(
     res.redirect("/admin-index");
   }
 );
-
-const port = 3000;
-app.listen(port, () => console.log(`This app is listening on port ${port}`));
