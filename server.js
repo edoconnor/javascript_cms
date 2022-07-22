@@ -48,9 +48,9 @@ function saveArticleAndRedirect(path) {
     article.content = req.body.content;
     try {
       article = await article.save();
-      res.redirect(`/${article.slug}`);
+      res.redirect(`/admin-index`);
     } catch (e) {
-      res.render(`/admin-index/${path}`, { article: article });
+      res.render(`/${path}`, { article: article });
     }
   };
 }
@@ -117,7 +117,7 @@ app.put(
     req.article = await Article.findById(req.params.id);
     next();
   },
-  saveArticleAndRedirect("/admin-index")
+  saveArticleAndRedirect("admin-index")
 );
 
 app.delete("/:id", async (req, res) => {
