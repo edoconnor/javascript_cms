@@ -17,10 +17,10 @@ app.use(
   session({
     resave: false,
     saveUninitialized: false,
-    secret: "e0ee1c265d41fa0c16ed3a5d3f08f8cec962d17fd8c2858ea1560a5d0be874c9",
+    secret: "SECRET",
     store: MongoStore.create({
       mongoUrl:
-        "mongodb+srv://eddie:jamestown@cluster0.swuan.mongodb.net/test?retryWrites=true&w=majority",
+        "URI",
     }),
   })
 );
