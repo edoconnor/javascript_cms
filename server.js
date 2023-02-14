@@ -10,6 +10,8 @@ const User = require("./user.js");
 
 const app = express();
 
+const PORT = process.env.PORT || 8080;
+
 app.use(express.json());
 
 require('dotenv').config();
@@ -150,6 +152,6 @@ app.get("/", async (req, res) => {
     }
   );
 
-  app.listen(process.env.PORT || 5200, () => {
-    console.log("Server is on " + PORT);
+  app.listen(process.env.PORT || 8080, () => {
+    console.log(`Express is working on port ${PORT}`);
   });
