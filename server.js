@@ -150,6 +150,6 @@ app.get("/", async (req, res) => {
     }
   );
 
-app.listen(3000, () => {
-    console.log(`Server Started at ${3000}`)
-})
+  app.listen(process.env.PORT || 5200, () => {
+    console.log("Server is on " + PORT);
+  });
