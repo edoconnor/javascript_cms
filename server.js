@@ -1,29 +1,37 @@
-const express = require("express");
+const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const connectEnsureLogin = require("connect-ensure-login");
 const methodOverride = require("method-override");
 const Article = require("./models/article");
-
 const User = require("./user.js");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
 
-app.use(
-  session({
+require('dotenv').config();
+
+const mongoString = process.env.DATABASE_URL
+
+mongoose.connect(mongoString);
+const database = mongoose.connection
+
+database.on('error', (error) => {
+    console.log(error)
+})
+
+database.once('connected', () => {
+    console.log('Database Connected');
+})
+
+app.use(session({
+    secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
-    secret: "SECRET",
-    store: MongoStore.create({
-      mongoUrl:
-        "URI",
-    }),
-  })
-);
+    saveUninitialized: false
+  }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -54,95 +62,94 @@ function saveArticleAndRedirect(path) {
     }
   };
 }
-
 app.get("/", async (req, res) => {
-  const articles = await Article.find().sort({ createdAt: "desc" });
-  res.render("index", { articles: articles });
-});
-
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-app.get("/admin-home", (req, res) => {
-  res.render("admin-home");
-});
-
-app.get(
-  "/admin-index",
-  connectEnsureLogin.ensureLoggedIn(),
-  async (req, res) => {
     const articles = await Article.find().sort({ createdAt: "desc" });
-    res.render("admin-index", { articles: articles });
-  }
-);
-
-app.get("/new", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.render("new");
-});
-
-app.get("/edit/:id", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const article = await Article.findById(req.params.id);
-  res.render("edit", { article: article });
-});
-
-app.get("/show/:slug", async (req, res) => {
-  const article = await Article.findOne({ slug: req.params.slug });
-  if (article == null) res.redirect("/");
-  res.render("show", { article: article });
-});
-
-app.get(
-  "/admin-show/:slug",
-  connectEnsureLogin.ensureLoggedIn(),
-  async (req, res) => {
+    res.render("index", { articles: articles });
+  });
+  
+  app.get("/login", (req, res) => {
+    res.render("login");
+  });
+  
+  app.get("/admin-home", (req, res) => {
+    res.render("admin-home");
+  });
+  
+  app.get(
+    "/admin-index",
+    connectEnsureLogin.ensureLoggedIn(),
+    async (req, res) => {
+      const articles = await Article.find().sort({ createdAt: "desc" });
+      res.render("admin-index", { articles: articles });
+    }
+  );
+  
+  app.get("/new", connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+    res.render("new");
+  });
+  
+  app.get("/edit/:id", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+    const article = await Article.findById(req.params.id);
+    res.render("edit", { article: article });
+  });
+  
+  app.get("/show/:slug", async (req, res) => {
     const article = await Article.findOne({ slug: req.params.slug });
     if (article == null) res.redirect("/");
-    res.render("admin-show", { article: article });
-  }
-);
-
-app.post(
-  "/",
-  async (req, res, next) => {
-    req.article = new Article();
-    next();
-  },
-  saveArticleAndRedirect("/admin-index")
-);
-
-app.put(
-  "/:id",
-  async (req, res, next) => {
-    req.article = await Article.findById(req.params.id);
-    next();
-  },
-  saveArticleAndRedirect("admin-index")
-);
-
-app.delete("/:id", async (req, res) => {
-  await Article.findByIdAndDelete(req.params.id);
-  res.redirect("/");
-});
-
-app.post("/logout", function (req, res) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
+    res.render("show", { article: article });
+  });
+  
+  app.get(
+    "/admin-show/:slug",
+    connectEnsureLogin.ensureLoggedIn(),
+    async (req, res) => {
+      const article = await Article.findOne({ slug: req.params.slug });
+      if (article == null) res.redirect("/");
+      res.render("admin-show", { article: article });
     }
+  );
+  
+  app.post(
+    "/",
+    async (req, res, next) => {
+      req.article = new Article();
+      next();
+    },
+    saveArticleAndRedirect("/admin-index")
+  );
+  
+  app.put(
+    "/:id",
+    async (req, res, next) => {
+      req.article = await Article.findById(req.params.id);
+      next();
+    },
+    saveArticleAndRedirect("admin-index")
+  );
+  
+  app.delete("/:id", async (req, res) => {
+    await Article.findByIdAndDelete(req.params.id);
     res.redirect("/");
   });
-});
+  
+  app.post("/logout", function (req, res) {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
+  });
+  
+  app.post(
+    "/login",
+    passport.authenticate("local", { failureRedirect: "/" }),
+    function (req, res) {
+      console.log(req.user);
+      res.redirect("/admin-index");
+    }
+  );
 
-app.post(
-  "/login",
-  passport.authenticate("local", { failureRedirect: "/" }),
-  function (req, res) {
-    console.log(req.user);
-    res.redirect("/admin-index");
-  }
-);
-
-app.listen(PORT, () => {
-  console.log(`Our app is running on port ${PORT}`);
-});
+app.listen(3000, () => {
+    console.log(`Server Started at ${3000}`)
+})
