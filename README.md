@@ -1,3 +1,4 @@
-# micro_cms
+# Express CMS Platform With MongoDB API
+![Express CMS Platform screenshot](screenshot.png)
 
-Responsive CMS built with Javascript. There is a hidden Admin login that is accessed via the "+" sign on the top navbar. Admins can create, edit and delete posts. 
+View deployed app: [https://shrouded-sierra-91025.herokuapp.com/](https://shrouded-sierra-91025.herokuapp.com/).
